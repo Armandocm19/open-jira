@@ -54,9 +54,14 @@ export const EntriesProvider: FC<Props> = ({ children }) => {
     }
 
     const refreshEntries = async () => {
-        const { data } = await entriesApi.get<Entry[]>('/entries')
+        
+        try {
+            const { data } = await entriesApi.get<Entry[]>('/entries')
+            dispatch({ type: '[Entry] Refresh-Entry', payload: data });
+        } catch (error) {
+            console.log(error)
+        }
 
-        dispatch({ type: '[Entry] Refresh-Entry', payload: data })
     }
 
     const onDeleteEntry = async ( entry: Entry ) => {
