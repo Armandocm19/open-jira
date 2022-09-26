@@ -1,21 +1,23 @@
 import React, { DragEvent, FC, useContext, useMemo } from 'react'
 import { List, Paper } from '@mui/material'
 
-import { EntryStatus } from '../../interfaces'
+import { Entry, EntryStatus } from '../../interfaces'
 import { EntryCard } from './'
 
 import { EntriesContext } from '../../context/entries';
 import { UIContext } from '../../context/ui';
 
 import styles from './EntryList.module.css'
+import { GetServerSideProps } from 'next';
 
 interface Props {
     status: EntryStatus;
+    entries: Entry[];
 }
 
-export const EntryList: FC<Props> = ({ status }) => {
+export const EntryList: FC<Props> = ({ status, entries }) => {
 
-    const { entries, onEntryUpdated } = useContext( EntriesContext )
+    const { onEntryUpdated } = useContext( EntriesContext )
     const { isDragging, endDraggin } = useContext( UIContext )
 
     const entriesByStatus = useMemo( () => entries.filter( entry => entry.status === status ) , [ entries ]) 
@@ -60,3 +62,4 @@ export const EntryList: FC<Props> = ({ status }) => {
     </div>
   )
 }
+

@@ -31,7 +31,7 @@ const getEntries = async ( res: NextApiResponse<Data> ) => {
 
     await db.connect()
 
-    const entries = await Entry.find().sort({ createAt: 'ascending' }) //Ordena la data por el "createAt" de manera ascendente
+    const entries = await Entry.find(); //Ordena la data por el "createAt" de manera ascendente
 
     await db.disconnect()
 

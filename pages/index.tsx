@@ -1,9 +1,33 @@
+import { useState, useEffect } from 'react'
 import type { NextPage } from 'next'
 import { Card, CardContent, CardHeader, Grid } from '@mui/material'
+
 import { Layout } from '../components/layouts'
 import { EntryList, NewEntry } from '../components/ui'
+import { Entry } from '../interfaces';
+import entriesApi from '../apis/entriesApi'
 
 const HomePage: NextPage = () => {
+
+  const [Entries, setEntries] = useState<Entry[]>([]);
+
+  const getEntries = async () => {
+    const { data } = await entriesApi.get<Entry[]>('/entries');
+
+    setEntries(data);
+  }
+
+  useEffect(() => {
+    
+    try {
+      getEntries();
+    } catch (error) {
+      console.log(error)
+    }
+
+  }, [])
+  
+  console.log('entradas: ', Entries);
 
   return (
     <Layout title='Home - OpenJira'>
@@ -18,7 +42,7 @@ const HomePage: NextPage = () => {
             <CardContent>
               {/* Agregar una nueva entrada */}
               <NewEntry />
-              <EntryList status='pending' />
+              <EntryList status='pending' entries={Entries} />
             </CardContent>
 
           </Card>
@@ -30,7 +54,7 @@ const HomePage: NextPage = () => {
 
             <CardContent>
               {/* Agregar una nueva entrada */}
-              <EntryList status='in-progress' />
+              <EntryList status='in-progress' entries={Entries} />
             </CardContent>
 
           </Card>
@@ -42,7 +66,7 @@ const HomePage: NextPage = () => {
 
             <CardContent>
               {/* Agregar una nueva entrada */}
-              <EntryList status='finished' />
+              <EntryList status='finished' entries={Entries} />
             </CardContent>
 
           </Card>
@@ -54,3 +78,15 @@ const HomePage: NextPage = () => {
   )
 }
 export default HomePage
+
+// export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+
+//       const { data } = await entriesApi.get<Entry[]>('/entries');
+
+//       return {
+//         props: {
+//           entries: data
+//         }
+//       }
+
+// }
